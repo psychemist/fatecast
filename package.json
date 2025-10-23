@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A social prediction market dApp using PYUSD, Pyth Oracle, and ASI agents",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^6.1.0",
     "@nomicfoundation/hardhat-verify": "^2.1.1",
+    "@types/node": "^24.9.1",
     "hardhat": "^3.0.9"
   },
   "dependencies": {
