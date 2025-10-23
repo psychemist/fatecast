@@ -16,6 +16,10 @@ dist
 build
 out
 
+# Foundry
+broadcast
+cache_foundry
+
 # IDE
 .vscode
 .idea

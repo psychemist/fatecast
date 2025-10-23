@@ -1,0 +1,57 @@
+{
+  "networks": {
+    "sepolia": {
+      "chainId": 11155111,
+      "rpc": "https://sepolia.infura.io/v3/YOUR_KEY",
+      "explorer": "https://sepolia.blockscout.com",
+      "pyth": {
+        "oracle": "0xDd24F84d36BF92C65F92307595335bdFab5Bbd21",
+        "priceFeeds": {
+          "BTC/USD": "0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43",
+          "ETH/USD": "0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace",
+          "SOL/USD": "0xef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d"
+        }
+      },
+      "pyusd": null,
+      "config": {
+        "minBetAmount": 1000000,
+        "maxBetAmount": 10000000000
+      }
+    },
+    "mainnet": {
+      "chainId": 1,
+      "rpc": "https://mainnet.infura.io/v3/YOUR_KEY",
+      "explorer": "https://etherscan.io",
+      "pyth": {
+        "oracle": "0x4305FB66699C3B2702D4d05CF36551390A4c69C6",
+        "priceFeeds": {
+          "BTC/USD": "0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43",
+          "ETH/USD": "0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace"
+        }
+      },
+      "pyusd": "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8",
+      "config": {
+        "minBetAmount": 1000000,
+        "maxBetAmount": 10000000000
+      }
+    },
+    "localhost": {
+      "chainId": 31337,
+      "rpc": "http://127.0.0.1:8545",
+      "explorer": null,
+      "config": {
+        "minBetAmount": 1000000,
+        "maxBetAmount": 10000000000
+      }
+    }
+  },
+  "deployment": {
+    "gasLimit": 5000000,
+    "gasPrice": null,
+    "nonce": null
+  },
+  "verification": {
+    "attempts": 3,
+    "delay": 5000
+  }
+}
