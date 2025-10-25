@@ -12,12 +12,17 @@
     "resolve-events": "ts-node src/resolveEvents.ts",
     "monitor": "ts-node src/monitor.ts"
   },
-  "keywords": ["prediction-market", "asi-agent", "automation", "pyth-oracle"],
+  "keywords": [
+    "prediction-market",
+    "asi-agent",
+    "automation",
+    "pyth-oracle"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.6.2",
-    "dotenv": "^16.3.1",
+    "axios": "^1.12.2",
+    "dotenv": "^16.6.1",
     "ethers": "^6.9.0",
     "node-cron": "^3.0.3",
     "winston": "^3.11.0"
@@ -25,7 +30,7 @@
   "devDependencies": {
     "@types/node": "^20.10.4",
     "@types/node-cron": "^3.0.11",
-    "typescript": "^5.3.3",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }

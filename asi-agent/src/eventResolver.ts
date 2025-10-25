@@ -31,18 +31,21 @@ export async function getActiveEvents(): Promise<string[]> {
 export async function getEventDetails(eventId: string): Promise<PendingEvent | null> {
   try {
     const market = getPredictionMarket();
+    // Keep as string - ethers will handle the conversion
     const eventData: any = await market.getEvent(eventId);
 
+    // Ethers v6 returns structs with both named and indexed access
+    // Event struct: id, question, pythFeedId, targetPrice, deadline, totalYes, totalNo, totalPool, resolved, outcome, creator, createdAt
     return {
       id: eventId,
-      question: eventData.question || eventData[1],
-      pythFeedId: eventData.pythFeedId || eventData[2],
-      targetPrice: eventData.targetPrice || eventData[3],
-      deadline: Number(eventData.deadline || eventData[4]),
-      resolved: eventData.resolved !== undefined ? eventData.resolved : eventData[8],
+      question: eventData[1], // index 1
+      pythFeedId: eventData[2], // index 2
+      targetPrice: eventData[3], // index 3
+      deadline: Number(eventData[4]), // index 4
+      resolved: eventData[8], // index 8
     };
   } catch (error: any) {
-    logger.error(`Error fetching event ${eventId}:`, error.message);
+    logger.error(`Error fetching event ${eventId}:`, JSON.stringify(error));
     return null;
   }
 }

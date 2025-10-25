@@ -6,7 +6,7 @@ import logger from './logger';
 export const PREDICTION_MARKET_ABI = [
   'function createEvent(string question, bytes32 pythFeedId, int64 targetPrice, uint256 deadline) returns (uint256)',
   'function resolveEvent(uint256 eventId)',
-  'function getEvent(uint256 eventId) view returns (tuple(uint256 id, string question, bytes32 pythFeedId, int64 targetPrice, uint256 deadline, uint256 totalYes, uint256 totalNo, uint256 totalPool, bool resolved, bool outcome, address creator, uint256 createdAt))',
+  'function getEvent(uint256 eventId) view returns (uint256 id, string question, bytes32 pythFeedId, int64 targetPrice, uint256 deadline, uint256 totalYes, uint256 totalNo, uint256 totalPool, bool resolved, bool outcome, address creator, uint256 createdAt)',
   'function getActiveEvents() view returns (uint256[])',
   'function eventCounter() view returns (uint256)',
   'event EventCreated(uint256 indexed eventId, string question, bytes32 pythFeedId, int64 targetPrice, uint256 deadline, address indexed creator)',

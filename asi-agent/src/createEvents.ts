@@ -3,7 +3,7 @@
 import logger from './utils/logger';
 import { validateConfig } from './config';
 import { initializeContracts, checkBalance } from './utils/contracts';
-import { createPredictionEvent, createBatchEvents } from './eventCreator';
+import { createAsiPoweredEvent, createPredictionEvent, createBatchEvents } from './eventCreator';
 
 async function main() {
   try {
@@ -27,7 +27,8 @@ async function main() {
     logger.info(`Creating ${count} event(s)...`);
 
     if (count === 1) {
-      const eventId = await createPredictionEvent();
+      const eventId = await createAsiPoweredEvent();
+    //   const eventId = await createPredictionEvent();
       if (eventId) {
         logger.info(`✅ Successfully created event: ${eventId}`);
       } else {
