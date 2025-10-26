@@ -3,36 +3,152 @@ export const PYUSD_ADDRESS = process.env.NEXT_PUBLIC_PYUSD_ADDRESS as `0x${strin
 export const PYTH_ORACLE_ADDRESS = process.env.NEXT_PUBLIC_PYTH_ORACLE_ADDRESS as `0x${string}`;
 
 export const PREDICTION_MARKET_ABI = [
-  // Events
-  'event EventCreated(uint256 indexed eventId, string question, bytes32 pythFeedId, int64 targetPrice, uint256 deadline, address indexed creator)',
-  'event EnteredMarket(uint256 indexed eventId, address indexed user, bool prediction, uint256 amount)',
-  'event EventResolved(uint256 indexed eventId, bool outcome, int64 finalPrice)',
-  'event WinningsClaimed(uint256 indexed eventId, address indexed user, uint256 amount)',
-  
-  // Read functions
-  'function getEvent(uint256 eventId) view returns (uint256 id, string question, bytes32 pythFeedId, int64 targetPrice, uint256 deadline, uint256 totalYes, uint256 totalNo, uint256 totalPool, bool resolved, bool outcome, address creator, uint256 createdAt)',
-  'function getUserBet(address user, uint256 eventId) view returns (uint256 amount, bool prediction)',
-  'function getActiveEvents() view returns (uint256[])',
-  'function eventCounter() view returns (uint256)',
-  'function calculatePotentialWinnings(uint256 eventId, address user) view returns (uint256)',
-  'function hasClaimedWinnings(address user, uint256 eventId) view returns (bool)',
-  'function minBetAmount() view returns (uint256)',
-  'function maxBetAmount() view returns (uint256)',
-  
-  // Write functions
-  'function createEvent(string question, bytes32 pythFeedId, int64 targetPrice, uint256 deadline) returns (uint256)',
-  'function enterMarket(uint256 eventId, bool prediction, uint256 amount)',
-  'function resolveEvent(uint256 eventId)',
-  'function claimWinnings(uint256 eventId)',
+  {
+    type: 'function',
+    name: 'getActiveEvents',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'uint256[]' }],
+  },
+  {
+    type: 'function',
+    name: 'eventCounter',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'getEvent',
+    stateMutability: 'view',
+    inputs: [{ name: 'eventId', type: 'uint256' }],
+    outputs: [
+      {
+        type: 'tuple',
+        components: [
+          { name: 'id', type: 'uint256' },
+          { name: 'question', type: 'string' },
+          { name: 'pythFeedId', type: 'bytes32' },
+          { name: 'targetPrice', type: 'int64' },
+          { name: 'deadline', type: 'uint256' },
+          { name: 'totalYes', type: 'uint256' },
+          { name: 'totalNo', type: 'uint256' },
+          { name: 'totalPool', type: 'uint256' },
+          { name: 'resolved', type: 'bool' },
+          { name: 'outcome', type: 'bool' },
+          { name: 'creator', type: 'address' },
+          { name: 'createdAt', type: 'uint256' },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'getUserBet',
+    stateMutability: 'view',
+    inputs: [
+      { name: 'user', type: 'address' },
+      { name: 'eventId', type: 'uint256' },
+    ],
+    outputs: [
+      {
+        type: 'tuple',
+        components: [
+          { name: 'amount', type: 'uint256' },
+          { name: 'prediction', type: 'bool' },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'calculatePotentialWinnings',
+    stateMutability: 'view',
+    inputs: [
+      { name: 'eventId', type: 'uint256' },
+      { name: 'user', type: 'address' },
+    ],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'hasClaimedWinnings',
+    stateMutability: 'view',
+    inputs: [
+      { name: 'user', type: 'address' },
+      { name: 'eventId', type: 'uint256' },
+    ],
+    outputs: [{ type: 'bool' }],
+  },
+  {
+    type: 'function',
+    name: 'minBetAmount',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'maxBetAmount',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'enterMarket',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'eventId', type: 'uint256' },
+      { name: 'prediction', type: 'bool' },
+      { name: 'amount', type: 'uint256' },
+    ],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'claimWinnings',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'eventId', type: 'uint256' }],
+    outputs: [],
+  },
 ] as const;
 
 export const PYUSD_ABI = [
-  'function balanceOf(address account) view returns (uint256)',
-  'function approve(address spender, uint256 amount) returns (bool)',
-  'function allowance(address owner, address spender) view returns (uint256)',
-  'function decimals() view returns (uint8)',
-  'function symbol() view returns (string)',
-  'function name() view returns (string)',
+  {
+    type: 'function',
+    name: 'balanceOf',
+    stateMutability: 'view',
+    inputs: [{ name: 'account', type: 'address' }],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'approve',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'spender', type: 'address' },
+      { name: 'amount', type: 'uint256' },
+    ],
+    outputs: [{ type: 'bool' }],
+  },
+  {
+    type: 'function',
+    name: 'allowance',
+    stateMutability: 'view',
+    inputs: [
+      { name: 'owner', type: 'address' },
+      { name: 'spender', type: 'address' },
+    ],
+    outputs: [{ type: 'uint256' }],
+  },
+  {
+    type: 'function',
+    name: 'decimals',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'uint8' }],
+  },
 ] as const;
 
 // Event signature hashes for Blockscout filtering

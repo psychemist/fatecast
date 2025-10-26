@@ -9,15 +9,24 @@ import { useEffect } from 'react';
  * Hook for reading contract data
  */
 export function useReadPredictionMarket<T = unknown>(
-  functionName: string,
-  args?: unknown[]
+  functionName: "getActiveEvents" | "eventCounter" | "getEvent" | "getUserBet" | "calculatePotentialWinnings" | "hasClaimedWinnings" | "minBetAmount" | "maxBetAmount",
+  args?: readonly unknown[]
 ) {
-  return useReadContract({
+  const result = useReadContract({
     address: PREDICTION_MARKET_ADDRESS,
     abi: PREDICTION_MARKET_ABI,
     functionName,
-    args,
-  }) as { data: T; isLoading: boolean; error: Error | null; refetch: () => void };
+    args: args as any,
+    query: {
+      enabled: args !== undefined || functionName === 'getActiveEvents' || functionName === 'eventCounter',
+      refetchInterval: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      staleTime: Infinity,
+    },
+  });
+
+  return result as { data: T; isLoading: boolean; error: Error | null; refetch: () => void };
 }
 
 /**
@@ -42,8 +51,8 @@ export function useWritePredictionMarket() {
     writeContract({
       address: PREDICTION_MARKET_ADDRESS,
       abi: PREDICTION_MARKET_ABI,
-      functionName,
-      args,
+      functionName: functionName as any,
+      args: args as any,
     });
   };
 

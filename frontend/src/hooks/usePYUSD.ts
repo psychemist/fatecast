@@ -12,15 +12,29 @@ import { useAccount } from 'wagmi';
 export function usePYUSDBalance() {
   const { address } = useAccount();
   
+  // Ensure we target the Sepolia chain and re-run when args / account change
+  const chainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID || 11155111);
+
   const { data, isLoading, refetch } = useReadContract({
     address: PYUSD_ADDRESS,
     abi: PYUSD_ABI,
     functionName: 'balanceOf',
     args: address ? [address] : undefined,
+    chainId,
+    query: {
+      enabled: !!address,
+      refetchInterval: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      staleTime: Infinity,
+    },
   });
 
+  // Normalize returned value to bigint
+  const balance = data ? BigInt(String(data)) : BigInt(0);
+
   return {
-    balance: data as bigint || BigInt(0),
+    balance,
     isLoading,
     refetch,
   };
@@ -32,15 +46,27 @@ export function usePYUSDBalance() {
 export function usePYUSDAllowance(spender: `0x${string}`) {
   const { address } = useAccount();
   
+  const chainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID || 11155111);
+
   const { data, isLoading, refetch } = useReadContract({
     address: PYUSD_ADDRESS,
     abi: PYUSD_ABI,
     functionName: 'allowance',
     args: address ? [address, spender] : undefined,
+    chainId,
+    query: {
+      enabled: !!address,
+      refetchInterval: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      staleTime: Infinity,
+    },
   });
 
+  const allowance = data ? BigInt(String(data)) : BigInt(0);
+
   return {
-    allowance: data as bigint || BigInt(0),
+    allowance,
     isLoading,
     refetch,
   };
