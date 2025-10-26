@@ -11,7 +11,12 @@ import { useEffect } from 'react';
 export function useReadPredictionMarket<T = unknown>(
   functionName: "getActiveEvents" | "eventCounter" | "getEvent" | "getUserBet" | "calculatePotentialWinnings" | "hasClaimedWinnings" | "minBetAmount" | "maxBetAmount",
   args?: readonly unknown[]
-) {
+): {
+  data: T | undefined;
+  isLoading: boolean;
+  error: Error | null;
+  refetch: () => void;
+} {
   const result = useReadContract({
     address: PREDICTION_MARKET_ADDRESS,
     abi: PREDICTION_MARKET_ABI,
@@ -26,7 +31,12 @@ export function useReadPredictionMarket<T = unknown>(
     },
   });
 
-  return result as { data: T; isLoading: boolean; error: Error | null; refetch: () => void };
+  return {
+    data: result.data as T | undefined,
+    isLoading: result.isPending || result.isLoading,
+    error: result.error,
+    refetch: result.refetch,
+  };
 }
 
 /**
