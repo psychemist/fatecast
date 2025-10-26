@@ -1,0 +1,9 @@
+{
+  "network": "11155111",
+  "timestamp": "1761404964",
+  "contracts": {
+    "PredictionMarket": "0x86D29196D23d88B68359B819Cc4b93671B03953C",
+    "PYUSD": "0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9",
+    "PythOracle": "0x4305FB66699C3B2702D4d05CF36551390A4c69C6"
+  }
+}
