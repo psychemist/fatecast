@@ -78,6 +78,19 @@ export function BetModal({ eventId, onClose }: BetModalProps) {
     }
   }, [approvalSuccess, isProcessing, amount, eventId, prediction, placeBet]);
 
+  // Early return if event is not loaded
+  if (!event) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-lg max-w-md w-full p-6">
+          <div className="flex justify-center items-center">
+            <p className="text-gray-600">Loading event...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const totalYes = Number(ethers.formatUnits(event.totalYes, 6));
   const totalNo = Number(ethers.formatUnits(event.totalNo, 6));
   const totalPool = Number(ethers.formatUnits(event.totalPool, 6));
