@@ -1,0 +1,13 @@
+<!-- OG Image Placeholder -->
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#3B82F6"/>
+  <text x="50%" y="40%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white">
+    Fatecast
+  </text>
+  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" fill="#E0E7FF">
+    Decentralized Prediction Markets
+  </text>
+  <text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#DBEAFE">
+    Powered by PYUSD & Pyth Oracle
+  </text>
+</svg>
