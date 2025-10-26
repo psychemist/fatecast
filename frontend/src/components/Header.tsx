@@ -3,11 +3,22 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useTransactionPopup } from '@blockscout/app-sdk';
 import { usePYUSDBalance } from '@/hooks/usePYUSD';
+import { ensureCorrectNetwork } from '@/lib/switchNetwork';
 import { ethers } from 'ethers';
+import { useEffect } from 'react';
+import { useAccount } from 'wagmi';
 
 export function Header() {
   const { openPopup } = useTransactionPopup();
   const { balance } = usePYUSDBalance();
+  const { isConnected } = useAccount();
+
+  // Ensure wallet uses our Alchemy RPC when connected
+  useEffect(() => {
+    if (isConnected) {
+      ensureCorrectNetwork().catch(console.error);
+    }
+  }, [isConnected]);
 
   const handleViewTransactions = () => {
     openPopup({

@@ -23,11 +23,26 @@ export function EventList() {
     );
   }
 
-  if (eventIds.length === 0) {
+  if (!eventIds || eventIds.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-500 text-lg">No active events at the moment</p>
-        <p className="text-gray-400 text-sm mt-2">Check back soon for new prediction markets!</p>
+      <div className="text-center py-12 bg-white border border-gray-200 rounded-lg">
+        <div className="max-w-md mx-auto px-6">
+          <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-gray-700 text-lg font-semibold mb-2">No Active Events</p>
+          <p className="text-gray-500 text-sm mb-4">
+            There are currently no prediction markets available.
+          </p>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
+            <p className="text-blue-900 text-sm font-medium mb-2">💡 To create events:</p>
+            <ol className="text-blue-800 text-xs space-y-1 ml-4 list-decimal">
+              <li>Run the ASI agent: <code className="bg-blue-100 px-1 rounded">cd asi-agent && npm run create-events</code></li>
+              <li>Or start the continuous agent: <code className="bg-blue-100 px-1 rounded">npm run dev</code></li>
+              <li>Refresh this page after events are created</li>
+            </ol>
+          </div>
+        </div>
       </div>
     );
   }

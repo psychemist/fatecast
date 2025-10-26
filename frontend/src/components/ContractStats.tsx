@@ -1,18 +1,9 @@
 'use client';
 
 import { useEventCounter } from '@/hooks/useEvents';
-import { useEventActivities } from '@/hooks/useEvents';
-import { formatCompact } from '@/lib/utils';
 
 export function ContractStats() {
   const { count } = useEventCounter();
-  const { activities } = useEventActivities(100); // Fetch more for stats
-
-  // Calculate stats from activities
-  const totalBets = activities.filter(a => a.type === 'bet').length;
-  const totalVolume = activities
-    .filter(a => a.type === 'bet' && a.amount)
-    .reduce((sum, a) => sum + parseFloat(a.amount || '0'), 0);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -31,12 +22,12 @@ export function ContractStats() {
         </div>
       </div>
 
-      {/* Total Bets */}
+      {/* Placeholder for Total Bets */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-600 mb-1">Total Bets</p>
-            <p className="text-3xl font-bold text-gray-900">{totalBets}</p>
+            <p className="text-3xl font-bold text-gray-900">-</p>
           </div>
           <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
             <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,13 +37,13 @@ export function ContractStats() {
         </div>
       </div>
 
-      {/* Total Volume */}
+      {/* Placeholder for Total Volume */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-600 mb-1">Total Volume</p>
             <p className="text-3xl font-bold text-gray-900">
-              {formatCompact(totalVolume)}
+              -
               <span className="text-lg text-gray-600 ml-1">PYUSD</span>
             </p>
           </div>

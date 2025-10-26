@@ -17,12 +17,25 @@ export function BetModal({ eventId, onClose }: BetModalProps) {
   const { address } = useAccount();
   const { event } = useEvent(eventId);
   const { balance } = usePYUSDBalance();
-  const { allowance, refetch: refetchAllowance } = usePYUSDAllowance(PREDICTION_MARKET_ADDRESS);
-  const { approve, isSuccess: approvalSuccess, isPending: isApproving } = useApprovePYUSD();
-  const { write: placeBet, isSuccess: betSuccess, isPending: isBetting } = useWritePredictionMarket();
+  const { allowance } = usePYUSDAllowance(PREDICTION_MARKET_ADDRESS);
+  const { approve, hash: approveHash, isPending: isApproving, isConfirming: isApprovingConfirming, isSuccess: approvalSuccess } = useApprovePYUSD();
+  const { write: placeBet, hash: betHash, isSuccess: betSuccess, isPending: isBetting, error: betError } = useWritePredictionMarket();
 
   const [prediction, setPrediction] = useState<boolean>(true);
   const [amount, setAmount] = useState<string>('');
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // Check if event is still active (check once when component mounts)
+  const [isEventActive] = useState(() => {
+    if (!event) return false;
+    const now = Math.floor(Date.now() / 1000);
+    const deadline = Number(event.deadline);
+    return !event.resolved && now < deadline;
+  });
+
+  // Min bet is 1 PYUSD (1,000,000 with 6 decimals)
+  const MIN_BET = 1;
+  const MAX_BET = 10000;
 
   // Check if approval is needed
   const needsApproval = useMemo(() => {
@@ -33,35 +46,36 @@ export function BetModal({ eventId, onClose }: BetModalProps) {
     return false;
   }, [amount, allowance]);
 
-  // Refetch allowance after approval
-  useEffect(() => {
-    if (approvalSuccess) {
-      refetchAllowance();
-    }
-  }, [approvalSuccess, refetchAllowance]);
-
-  // Close modal after successful bet
-  useEffect(() => {
-    if (betSuccess) {
-      setTimeout(() => {
-        onClose();
-      }, 2000);
-    }
-  }, [betSuccess, onClose]);
-
-  if (!event || !address) {
-    return null;
-  }
-
-  const handleApprove = () => {
-    const amountWei = ethers.parseUnits(amount, 6);
-    approve(PREDICTION_MARKET_ADDRESS, amountWei);
-  };
-
   const handlePlaceBet = () => {
     const amountWei = ethers.parseUnits(amount, 6);
     placeBet('enterMarket', [eventId, prediction, amountWei]);
   };
+
+  const handleApproveAndBet = async () => {
+    setIsProcessing(true);
+     const amountWei = ethers.parseUnits(amount, 6);
+    
+    if (needsApproval) {
+      // Approve first, bet will happen automatically via useEffect
+      approve(PREDICTION_MARKET_ADDRESS, amountWei);
+    } else {
+      // Already approved, just bet
+      handlePlaceBet();
+    }
+  };
+
+  // Auto-proceed to bet after approval is CONFIRMED on-chain
+  useEffect(() => {
+    if (approvalSuccess && isProcessing) {
+      // Approval confirmed! Now place the bet
+      const amountWei = ethers.parseUnits(amount, 6);
+      placeBet('enterMarket', [eventId, prediction, amountWei]);
+      
+      // Reset processing state after a short delay
+      const timer = setTimeout(() => setIsProcessing(false), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [approvalSuccess, isProcessing, amount, eventId, prediction, placeBet]);
 
   const totalYes = Number(ethers.formatUnits(event.totalYes, 6));
   const totalNo = Number(ethers.formatUnits(event.totalNo, 6));
@@ -136,7 +150,8 @@ export function BetModal({ eventId, onClose }: BetModalProps) {
             onChange={(e) => setAmount(e.target.value)}
             placeholder="0.00"
             step="0.01"
-            min="0"
+            min={MIN_BET}
+            max={MAX_BET}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <div className="flex justify-between mt-2 text-sm text-gray-600">
@@ -148,6 +163,9 @@ export function BetModal({ eventId, onClose }: BetModalProps) {
               Max
             </button>
           </div>
+          <p className="mt-1 text-xs text-gray-500">
+            Min: {MIN_BET} PYUSD • Max: {MAX_BET} PYUSD
+          </p>
         </div>
 
         {/* Potential Winnings */}
@@ -168,31 +186,43 @@ export function BetModal({ eventId, onClose }: BetModalProps) {
           </div>
         )}
 
-        {/* Action Buttons */}
+        {/* Action Button - Single button that handles everything */}
         <div className="space-y-3">
-          {needsApproval && (
-            <button
-              onClick={handleApprove}
-              disabled={isApproving || !amount || parseFloat(amount) <= 0}
-              className="w-full bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-300 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:cursor-not-allowed"
-            >
-              {isApproving ? 'Approving...' : 'Approve PYUSD'}
-            </button>
+          {!isEventActive && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-800 text-sm font-medium">
+                ⚠️ This event has expired or been resolved. You cannot place bets.
+              </p>
+            </div>
           )}
           
           <button
-            onClick={handlePlaceBet}
-            disabled={needsApproval || isBetting || !amount || parseFloat(amount) <= 0 || parseFloat(amount) > Number(ethers.formatUnits(balance, 6))}
+            onClick={handleApproveAndBet}
+            disabled={!isEventActive || isProcessing || isApproving || isApprovingConfirming || isBetting || !amount || parseFloat(amount) < MIN_BET || parseFloat(amount) > MAX_BET || parseFloat(amount) > Number(ethers.formatUnits(balance, 6))}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:cursor-not-allowed"
           >
-            {isBetting ? 'Placing Bet...' : 'Place Bet'}
+            {isApproving || isApprovingConfirming ? 'Approving...' : isBetting ? 'Placing Bet...' : needsApproval ? 'Approve & Place Bet' : 'Place Bet'}
           </button>
+          
+          {needsApproval && (
+            <p className="text-xs text-gray-500 text-center">
+              You&apos;ll be asked to approve PYUSD first, then the bet will be placed automatically
+            </p>
+          )}
         </div>
 
         {betSuccess && (
           <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
             <p className="text-green-800 text-sm font-medium">
               ✓ Bet placed successfully!
+            </p>
+          </div>
+        )}
+
+        {betError && (
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-800 text-sm font-medium">
+              ✗ Error: {betError.message || 'Transaction failed'}
             </p>
           </div>
         )}

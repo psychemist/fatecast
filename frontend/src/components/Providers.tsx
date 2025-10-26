@@ -8,7 +8,19 @@ import { FarcasterProvider } from './FarcasterProvider';
 import { config } from '@/config/wagmi';
 import '@rainbow-me/rainbowkit/styles.css';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+      refetchIntervalInBackground: false,
+      retry: 1,
+      staleTime: Infinity, // Never auto-refetch
+    },
+  },
+});
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
