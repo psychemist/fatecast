@@ -1,13 +1,79 @@
-<!-- OG Image Placeholder -->
-<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="630" fill="#3B82F6"/>
-  <text x="50%" y="40%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white">
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <rect width="1200" height="630" fill="url(#ogBgGradient)"/>
+  
+  <defs>
+    <linearGradient id="ogBgGradient" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    
+    <linearGradient id="ogCrystalGradient" x1="300" y1="150" x2="300" y2="480" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Crystal ball illustration (left side) -->
+  <g transform="translate(50, 0)">
+    <!-- Glow -->
+    <circle cx="300" cy="315" r="180" fill="#8b5cf6" opacity="0.2"/>
+    
+    <!-- Ball holder base -->
+    <path d="M 235 450 Q 235 470 270 470 L 330 470 Q 365 470 365 450 L 350 430 L 250 430 Z" fill="#4338ca"/>
+    <ellipse cx="300" cy="430" rx="50" ry="10" fill="#6366f1"/>
+    
+    <!-- Crystal ball -->
+    <circle cx="300" cy="315" r="130" fill="url(#ogCrystalGradient)" stroke="#ddd6fe" stroke-width="4"/>
+    <circle cx="300" cy="315" r="115" fill="#8b5cf6" opacity="0.3"/>
+    
+    <!-- Highlights -->
+    <ellipse cx="255" cy="260" rx="50" ry="65" fill="white" opacity="0.25"/>
+    <circle cx="245" cy="245" r="25" fill="white" opacity="0.5"/>
+    
+    <!-- Chart inside -->
+    <path d="M 240 315 L 270 280 L 300 330 L 330 260 L 360 300" stroke="#ddd6fe" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.7"/>
+    
+    <!-- Sparkles -->
+    <path d="M 140 240 L 148 248 L 156 240 L 148 232 Z" fill="#fcd34d" opacity="0.8"/>
+    <path d="M 460 240 L 468 248 L 476 240 L 468 232 Z" fill="#fcd34d" opacity="0.8"/>
+    <path d="M 300 135 L 306 141 L 312 135 L 306 129 Z" fill="#fcd34d" opacity="0.9"/>
+  </g>
+  
+  <!-- Main text -->
+  <text x="680" y="220" font-family="system-ui, -apple-system, sans-serif" font-size="92" font-weight="bold" fill="white" text-anchor="start">
     Fatecast
   </text>
-  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" fill="#E0E7FF">
+  
+  <text x="680" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="#c4b5fd" text-anchor="start">
+    🔮
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="680" y="340" font-family="system-ui, -apple-system, sans-serif" font-size="36" fill="#e0e7ff" text-anchor="start">
     Decentralized Prediction Markets
   </text>
-  <text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#DBEAFE">
-    Powered by PYUSD & Pyth Oracle
-  </text>
+  
+  <!-- Features -->
+  <g font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#c4b5fd">
+    <text x="680" y="410">✓ Powered by PYUSD & Pyth Oracle</text>
+    <text x="680" y="450">✓ AI-Driven Event Creation</text>
+    <text x="680" y="490">✓ Farcaster Integration</text>
+  </g>
+  
+  <!-- Badges -->
+  <g transform="translate(680, 530)">
+    <!-- PYUSD badge -->
+    <rect width="120" height="45" rx="23" fill="#0052ff"/>
+    <text x="60" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" text-anchor="middle">PYUSD</text>
+    
+    <!-- Oracle badge -->
+    <rect x="140" width="120" height="45" rx="23" fill="#10b981"/>
+    <text x="200" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" text-anchor="middle">Oracle</text>
+    
+    <!-- ASI badge -->
+    <rect x="280" width="100" height="45" rx="23" fill="#8b5cf6"/>
+    <text x="330" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" text-anchor="middle">ASI</text>
+  </g>
 </svg>
