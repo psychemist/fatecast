@@ -1,7 +1,7 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { sepolia } from 'wagmi/chains';
 
-const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || 'https://eth-sepolia.g.alchemy.com/v2/P9Wl_G12LXrEHdc9EZDE-b5kKRh6l-LZ';
+const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || `https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
 
 // Override Sepolia's default RPC with Alchemy
 const customSepolia = {

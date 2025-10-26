@@ -12,9 +12,9 @@ import "../src/mocks/MockPyth.sol";
  * @dev Run with: forge script script/Deploy.s.sol:DeployScript --rpc-url $SEPOLIA_RPC_URL --broadcast --verify
  */
 contract DeployScript is Script {
-    // Configuration
-    address public constant SEPOLIA_PYTH_ORACLE = 0xDd24F84d36BF92C65F92307595335bdFab5Bbd21; // Pyth Sepolia
-    address public constant SEPOLIA_PYUSD = address(0); // TODO: Get real Sepolia PYUSD or deploy mock
+    // Configuration - Sepolia Testnet Addresses
+    address public constant SEPOLIA_PYTH_ORACLE = 0x4305FB66699C3B2702D4d05CF36551390A4c69C6; // Pyth Sepolia
+    address public constant SEPOLIA_PYUSD = 0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9; // Real PYUSD on Sepolia
     
     // Default configuration
     uint256 public constant MIN_BET_AMOUNT = 1 * 1e6; // 1 PYUSD (6 decimals)
@@ -35,10 +35,17 @@ contract DeployScript is Script {
 
         vm.startBroadcast(deployerPrivateKey);
 
-        // Deploy or use existing PYUSD
+        // Use PYUSD based on network
         address pyusdAddress;
-        if (SEPOLIA_PYUSD == address(0)) {
-            console.log("Deploying MockPYUSD...");
+        if (block.chainid == 11155111) { // Sepolia
+            pyusdAddress = SEPOLIA_PYUSD;
+            console.log("Using real PYUSD (Sepolia) at:", pyusdAddress);
+        } else if (block.chainid == 1) { // Mainnet
+            pyusdAddress = vm.envAddress("PYUSD_CONTRACT_ADDRESS_MAINNET");
+            console.log("Using real PYUSD (Mainnet) at:", pyusdAddress);
+        } else {
+            // For local testing, deploy mock
+            console.log("Deploying MockPYUSD for local testing...");
             MockPYUSD pyusd = new MockPYUSD();
             pyusdAddress = address(pyusd);
             console.log("MockPYUSD deployed at:", pyusdAddress);
@@ -46,9 +53,6 @@ contract DeployScript is Script {
             // Mint some tokens to deployer for testing
             pyusd.mint(deployer, 1000000 * 1e6); // 1M PYUSD
             console.log("Minted 1,000,000 PYUSD to deployer");
-        } else {
-            pyusdAddress = SEPOLIA_PYUSD;
-            console.log("Using existing PYUSD at:", pyusdAddress);
         }
         console.log("");
 

@@ -6,7 +6,7 @@ export async function forceAlchemyRPC() {
   if (typeof window === 'undefined' || !window.ethereum) return;
 
   const chainId = '0xaa36a7'; // Sepolia
-  const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || 'https://eth-sepolia.g.alchemy.com/v2/P9Wl_G12LXrEHdc9EZDE-b5kKRh6l-LZ';
+  const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || `https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
 
   try {
     // Force add our custom Sepolia with Alchemy RPC
