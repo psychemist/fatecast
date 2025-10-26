@@ -18,7 +18,7 @@ export function BetModal({ eventId, onClose }: BetModalProps) {
   const { event } = useEvent(eventId);
   const { balance } = usePYUSDBalance();
   const { allowance } = usePYUSDAllowance(PREDICTION_MARKET_ADDRESS);
-  const { approve, hash: approveHash, isPending: isApproving, isConfirming: isApprovingConfirming, isSuccess: approvalSuccess } = useApprovePYUSD();
+  const { approve, hash: approveHash, isPending: isApproving, isSuccess: approvalSuccess } = useApprovePYUSD();
   const { write: placeBet, hash: betHash, isSuccess: betSuccess, isPending: isBetting, error: betError } = useWritePredictionMarket();
 
   const [prediction, setPrediction] = useState<boolean>(true);
@@ -64,16 +64,17 @@ export function BetModal({ eventId, onClose }: BetModalProps) {
     }
   };
 
-  // Auto-proceed to bet after approval is CONFIRMED on-chain
+  // Auto-proceed to bet after approval
   useEffect(() => {
     if (approvalSuccess && isProcessing) {
-      // Approval confirmed! Now place the bet
-      const amountWei = ethers.parseUnits(amount, 6);
-      placeBet('enterMarket', [eventId, prediction, amountWei]);
+      const proceedToBet = () => {
+        const amountWei = ethers.parseUnits(amount, 6);
+        placeBet('enterMarket', [eventId, prediction, amountWei]);
+        setIsProcessing(false);
+      };
       
-      // Reset processing state after a short delay
-      const timer = setTimeout(() => setIsProcessing(false), 500);
-      return () => clearTimeout(timer);
+      // Wait for allowance to update on-chain, then place bet
+      setTimeout(proceedToBet, 2000);
     }
   }, [approvalSuccess, isProcessing, amount, eventId, prediction, placeBet]);
 
@@ -198,10 +199,10 @@ export function BetModal({ eventId, onClose }: BetModalProps) {
           
           <button
             onClick={handleApproveAndBet}
-            disabled={!isEventActive || isProcessing || isApproving || isApprovingConfirming || isBetting || !amount || parseFloat(amount) < MIN_BET || parseFloat(amount) > MAX_BET || parseFloat(amount) > Number(ethers.formatUnits(balance, 6))}
+            disabled={!isEventActive || isProcessing || isApproving || isBetting || !amount || parseFloat(amount) < MIN_BET || parseFloat(amount) > MAX_BET || parseFloat(amount) > Number(ethers.formatUnits(balance, 6))}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:cursor-not-allowed"
           >
-            {isApproving || isApprovingConfirming ? 'Approving...' : isBetting ? 'Placing Bet...' : needsApproval ? 'Approve & Place Bet' : 'Place Bet'}
+            {isApproving ? 'Approving...' : isBetting ? 'Placing Bet...' : needsApproval ? 'Approve & Place Bet' : 'Place Bet'}
           </button>
           
           {needsApproval && (
