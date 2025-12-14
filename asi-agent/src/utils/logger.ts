@@ -22,7 +22,13 @@ const consoleFormat = winston.format.combine(
   winston.format.printf(({ timestamp, level, message, ...meta }) => {
     let msg = `${timestamp} [${level}]: ${message}`;
     if (Object.keys(meta).length > 0) {
-      msg += ` ${JSON.stringify(meta)}`;
+      // Handle BigInt serialization
+      const safeStringify = (obj: any) => {
+        return JSON.stringify(obj, (_, value) => 
+          typeof value === 'bigint' ? value.toString() : value
+        );
+      };
+      msg += ` ${safeStringify(meta)}`;
     }
     return msg;
   })
