@@ -17,8 +17,9 @@ build
 out
 
 # Foundry
-broadcast
-cache_foundry
+contract/broadcast
+contract/cache_foundry
+contract/lib
 
 # IDE
 .vscode
@@ -34,3 +35,6 @@ Thumbs.db
 # Logs
 *.log
 logs
+
+# instructions
+**.MD
