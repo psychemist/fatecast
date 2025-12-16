@@ -73,23 +73,26 @@ export async function generateEventIdeas(
   currentPrices: Record<string, number>,
   existingEvents: string[]
 ): Promise<string[]> {
+  // Only use the assets we have Pyth feeds for
+  const supportedAssets = ['BTC', 'ETH', 'SOL'];
+  
   const prompt = `You are an AI helping create interesting cryptocurrency prediction markets.
 
+IMPORTANT: You can ONLY use these assets: ${supportedAssets.join(', ')}
+
 Current prices:
-${Object.entries(currentPrices).map(([asset, price]) => `- ${asset}: $${price}`).join('\n')}
+${Object.entries(currentPrices).map(([asset, price]) => `- ${asset}: $${price.toFixed(2)}`).join('\n')}
 
-Existing events (don't duplicate):
-${existingEvents.join('\n')}
+Existing events (avoid duplicates):
+${existingEvents.length > 0 ? existingEvents.join('\n') : 'None'}
 
-Generate 3 unique, interesting prediction questions about cryptocurrency prices for the next 24-72 hours. 
-Format each as: "Will [ASSET] reach $[PRICE] by [DATE]?"
+Generate 3 unique prediction questions using ONLY BTC, ETH, or SOL.
+Format EXACTLY as: "Will [ASSET] reach $[PRICE] by [DATE]?"
+Where [ASSET] must be BTC, ETH, or SOL.
+Where [PRICE] is a realistic target (5-20% move from current).
+Where [DATE] is 1-3 days from now.
 
-Focus on:
-1. Realistic but interesting price targets (10-30% moves)
-2. Different assets than existing events
-3. Time horizons of 1-3 days
-
-Return ONLY the 3 questions, one per line.`;
+Return ONLY the 3 questions, one per line. No numbering, no explanations.`;
 
   const messages: AsiOneMessage[] = [
     { role: 'system', content: 'You are a crypto market analyst creating prediction market events.' },

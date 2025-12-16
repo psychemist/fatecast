@@ -469,14 +469,13 @@ function parseAsiQuestion(
 }
 
 /**
- * Guess asset from free-form text
+ * Guess asset from free-form text (only supported assets with Pyth feeds)
  */
 function guessAssetFromText(question: string): string | null {
   const q = question.toLowerCase();
   if (q.includes('btc') || q.includes('bitcoin')) return 'BTC';
   if (q.includes('eth') || q.includes('ethereum')) return 'ETH';
   if (q.includes('sol') || q.includes('solana')) return 'SOL';
-  if (q.includes('xrp') || q.includes('ripple')) return 'XRP';
   return null;
 }
 

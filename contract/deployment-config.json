@@ -2,7 +2,7 @@
   "networks": {
     "sepolia": {
       "chainId": 11155111,
-      "rpc": "https://sepolia.infura.io/v3/YOUR_KEY",
+      "rpc": "https://sepolia.infura.io/v3/${{ALCHEMY_API_KEY}}",
       "explorer": "https://sepolia.blockscout.com",
       "pyth": {
         "oracle": "0xDd24F84d36BF92C65F92307595335bdFab5Bbd21",
@@ -20,7 +20,7 @@
     },
     "mainnet": {
       "chainId": 1,
-      "rpc": "https://mainnet.infura.io/v3/YOUR_KEY",
+      "rpc": "https://mainnet.infura.io/v3/${{ALCHEMY_API_KEY}}",
       "explorer": "https://etherscan.io",
       "pyth": {
         "oracle": "0x4305FB66699C3B2702D4d05CF36551390A4c69C6",

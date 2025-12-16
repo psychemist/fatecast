@@ -1,5 +1,7 @@
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { createConfig, http } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
+import { injected } from 'wagmi/connectors';
+import { farcasterMiniApp } from '@farcaster/miniapp-wagmi-connector';
 
 const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || `https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
 
@@ -12,9 +14,16 @@ const customSepolia = {
   },
 };
 
-export const config = getDefaultConfig({
-  appName: 'Fatecast',
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'a83108d42072874de6965f0ee92c672f',
+export const config = createConfig({
   chains: [customSepolia],
+  connectors: [
+    // Farcaster MiniApp connector - auto-connects when in Farcaster
+    farcasterMiniApp(),
+    // Fallback for regular web browsers
+    injected(),
+  ],
+  transports: {
+    [customSepolia.id]: http(rpcUrl),
+  },
   ssr: true,
 });
